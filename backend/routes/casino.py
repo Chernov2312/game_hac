@@ -18,7 +18,7 @@ async def get_prizes_to_front():
     
 @casino_router.post("/add_prize")
 async def add_prize_db(prize: Prize):
-    casino = await casino_basedao.get_by_name(prize.name) is None
+    casino = await casino_basedao.get_by_name(prize.name)
     if casino is None:
         await casino_basedao.create_entity(prize.model_dump())
         return {"message": "success"}
