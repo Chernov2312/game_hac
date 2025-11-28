@@ -29,13 +29,26 @@ class BaseDao(Generic[ModelType]):
             )
             return result.scalars().first()
         
+    async def get_entities(self):
+        async with self.async_session_maker() as session:
+            result = await session.execute(
+                select(self.model)
+            )
+            return result.scalars()
+        
+
     async def get_by_username(self, username: str):
         async with self.async_session_maker() as session:
             result = await session.execute(
                 select(self.model).where(self.model.username == username)
             )
             return result.scalars().first()
-    
+    async def get_by_name(self, name: str):
+        async with self.async_session_maker() as session:
+            result = await session.execute(
+                select(self.model).where(self.model.name == name)
+            )
+            return result.scalars().first()
     async def update_entity(self, id: int, data: Dict[str, Any]):
         async with self.async_session_maker() as session:
             result = await session.execute(
