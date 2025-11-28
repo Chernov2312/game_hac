@@ -49,6 +49,12 @@ class BaseDao(Generic[ModelType]):
                 select(self.model).where(self.model.name == name)
             )
             return result.scalars().first()
+    
+    async def get_all_name_by_rare(self, rare:str):
+        async with self.async_session_maker() as session:
+            result = await session.execute(select(self.model).where(self.model.rare == rare))
+        return result
+    
     async def update_entity(self, id: int, data: Dict[str, Any]):
         async with self.async_session_maker() as session:
             result = await session.execute(
