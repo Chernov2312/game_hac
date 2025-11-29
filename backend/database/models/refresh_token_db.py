@@ -15,7 +15,7 @@ class RefreshToken_DB(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), 
         primary_key=True, 
-        default=uuid.uuid7
+        default=uuid.uuid4
     )
     
     name: Mapped[str] = mapped_column(Text, unique=True, nullable=False)

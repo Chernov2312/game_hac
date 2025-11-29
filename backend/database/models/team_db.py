@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 def generate_uuid7():
     """Генератор UUID v7 (time-ordered UUID)"""
-    return uuid.uuid7()
+    return uuid.uuid4()
 
 class Team_DB(Base):
     __tablename__ = "teams"

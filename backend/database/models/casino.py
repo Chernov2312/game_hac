@@ -10,7 +10,7 @@ class Casino_DB(Base):
     item_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         primary_key=True,
-        default=uuid.uuid7
+        default=uuid.uuid4
     )
     name: Mapped[str] = mapped_column(String(100), nullable=False, unique=True)
     type: Mapped[str] = mapped_column(String(100), nullable=False)
