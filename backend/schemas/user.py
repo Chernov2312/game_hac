@@ -3,6 +3,7 @@ from typing import Optional
 
 class User(BaseModel):
     username: str
+    display_name:str
     password: str
     email: EmailStr
     max_score: int = 0
@@ -28,3 +29,7 @@ class User(BaseModel):
 class User_Login(BaseModel):
     username: str
     password: str
+    
+class Redact_User(BaseModel):
+    display_name: str
+    url: str

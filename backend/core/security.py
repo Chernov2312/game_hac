@@ -13,7 +13,7 @@ from schemas import User_Login
 import secrets
 
 password_hash = PasswordHash.recommended()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/v1/auth/login")
 user_dao = BaseDao(User_DB)
 token_dao = BaseDao(RefreshToken_DB)
 
