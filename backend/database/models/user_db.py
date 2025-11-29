@@ -16,13 +16,13 @@ class User_DB(Base):
     password: Mapped[str] = mapped_column(String(250), nullable=False)
     email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
     max_score: Mapped[int] = mapped_column(Integer, default=0)
-    money: Mapped[int] = mapped_column(Integer, default=0)
+    amount: Mapped[int] = mapped_column(Integer, default=0)
     team_id: Mapped[Optional[int]] = mapped_column(ForeignKey('teams.team_id'), nullable=True)
     url: Mapped[str] = mapped_column(String(100), nullable=True)
-    role: Mapped[str] = mapped_column(String(20), default="player")  # Добавляем поле роли
+    role: Mapped[str] = mapped_column(String(20), default="player")
     
-    team: Mapped[Optional['Team_DB']] = relationship('Team_DB', back_populates='users')
-    items: Mapped[List['Items_DB']] = relationship('Items_DB', back_populates='user')
+    team: Mapped[Optional['Team_DB']] = relationship('Team_DB', back_populates='users', lazy="joined")
+    items: Mapped[List['Items_DB']] = relationship('Items_DB', back_populates='user', lazy="joined")
     refresh_tokens: Mapped[List['RefreshToken_DB']] = relationship(
         'RefreshToken_DB', 
         back_populates='user',

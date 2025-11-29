@@ -15,4 +15,4 @@ class Team_DB(Base):
     money: Mapped[int] = mapped_column(Integer, default=0)
     
    
-    users: Mapped[List['User_DB']] = relationship('User_DB', back_populates='team')
+    users: Mapped[List['User_DB']] = relationship('User_DB', back_populates='team', lazy="joined")
