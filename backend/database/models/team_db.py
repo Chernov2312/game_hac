@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, Integer
+from sqlalchemy import String, Integer, DateTime, func
 from sqlalchemy.dialects.postgresql import UUID
 from typing import TYPE_CHECKING, List
 import uuid
@@ -26,4 +26,5 @@ class Team_DB(Base):
     score: Mapped[int] = mapped_column(Integer, default=0)
     amount: Mapped[int] = mapped_column(Integer, default=0)
     
-    users: Mapped[List['User_DB']] = relationship('User_DB', back_populates='team', lazy="joined")
+    
+    users: Mapped[List['User_DB']] = relationship('User_DB', back_populates='team', lazy="select")  # ИЗМЕНИТЬ

@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from database.models import User_DB, Casino_DB, Items_DB, Quests_DB, Token_qr_DB, Team_DB
 from database import BaseDao
 import random
-from schemas import Prize, get_prize, User_Bet, Redact_User, User, UserResponse, UserBalance, TeamLeaderboardResponse
+from schemas import Prize, GetPrize, UserBet, Redactuser, User, UserResponse, UserBalance, TeamLeaderboardResponse, MainInfoResponse
 from core import decode_access_token, generate_qr_base64, get_time_diff_seconds, research_user_energy
 import uuid
 user_router = APIRouter()
@@ -35,7 +35,7 @@ async def get_user_info(user: User_DB = Depends(decode_access_token)) -> UserRes
 }
 
 @user_router.patch("/profile/me", tags=["user"])
-async def patch_user(redact_info: Redact_User, user: User_DB = Depends(decode_access_token)) -> User:
+async def patch_user(redact_info: Redactuser, user: User_DB = Depends(decode_access_token)) -> User:
     user.display_name = redact_info.display_name
     user.url = redact_info.url
     await user_basedao.update_entity(user.user_id, user)
@@ -101,7 +101,7 @@ async def claim_quest(id: uuid.UUID):
     }
     
 @user_router.get("/main", tags=["user"])
-async def get_main_info(user: User_DB = Depends(decode_access_token)):
+async def get_main_info(user: User_DB = Depends(decode_access_token)) -> MainInfoResponse:
   next_refill = research_user_energy(user)
   user = user_basedao.get_entity_by_id(user.user_id)
   return{

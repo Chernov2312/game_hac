@@ -26,10 +26,10 @@ class User(BaseModel):
             raise ValueError(f"Role must be one of: {valid_roles}")
         return v
     
-class User_Login(BaseModel):
+class UserLogin(BaseModel):
     username: str
     password: str
     
-class Redact_User(BaseModel):
+class Redactuser(BaseModel):
     display_name: str
     url: str

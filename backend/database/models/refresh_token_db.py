@@ -28,4 +28,4 @@ class RefreshToken_DB(Base):
     
     expires_at: Mapped[DateTime] = mapped_column(DateTime, nullable=False)
     
-    user: Mapped['User_DB'] = relationship('User_DB', back_populates='refresh_tokens', lazy="joined")
+    user: Mapped['User_DB'] = relationship('User_DB', back_populates='refresh_tokens', lazy="select")  # ИЗМЕНИТЬ

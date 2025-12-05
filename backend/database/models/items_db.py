@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, ForeignKey, Integer, Boolean
+from sqlalchemy import String, ForeignKey, Integer, Boolean, DateTime, func
 from sqlalchemy.dialects.postgresql import UUID
 from typing import Optional, TYPE_CHECKING
 import uuid
@@ -27,4 +27,6 @@ class Items_DB(Base):
         ForeignKey("users.user_id"),
         nullable=False
     )
-    user: Mapped[Optional['User_DB']] = relationship('User_DB', back_populates='items', lazy="joined")
+    
+    
+    user: Mapped[Optional['User_DB']] = relationship('User_DB', back_populates='items', lazy="select")  # ИЗМЕНИТЬ

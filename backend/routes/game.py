@@ -4,7 +4,7 @@ from database import BaseDao
 import random
 from core import get_random_item, decode_access_token
 from typing import List
-from schemas import game_result, game_session, GameStart
+from schemas import GameResult, GameSession, GameStart
 
 game_router = APIRouter()
 
@@ -14,8 +14,11 @@ casino_basedao = BaseDao(Casino_DB)
 items_dao = BaseDao(Items_DB)
 game_session_dao = BaseDao(Game_session_DB)
 
-@game_router.get("/start", tags=["game"])
+@game_router.post("/start", tags=["game"])
 async def get_session_game(user: User_DB = Depends(decode_access_token)) -> GameStart:
+    if user.energy >= 1:
+        user.energy -= 1
+        await user_basedao.update_entity(user.user_id, user.__dict__)
     score = user.score
     users = await user_basedao.get_all_by_score(score)
     elem = random.choice(users)
@@ -30,7 +33,7 @@ async def get_session_game(user: User_DB = Depends(decode_access_token)) -> Game
             }
 
 @game_router.post("/result", tags=["game"])
-async def set_game_result(game_res: game_result):
+async def set_game_result(game_res: GameResult):
     game_session = await game_session_dao.get_entity_by_id(game_res.session_id)
     game_session.winner_id = game_res.winner_id
     game_session.status = "end"

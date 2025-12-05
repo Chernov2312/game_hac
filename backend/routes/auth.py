@@ -1,7 +1,7 @@
 from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, status, Header
 
-from schemas import Token, User, User_Login, RefreshTokenRequest
+from schemas import Token, User, UserLogin, RefreshTokenRequest
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from typing import Annotated
 from core import get_password_hash, create_access_token, create_refresh_token, authenticate_user, save_refresh_token, get_user, delete_refresh_token, get_refresh_token

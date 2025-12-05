@@ -8,21 +8,21 @@ from schemas import QuestCreate, UserQuestCreate, CreateSuccess, QuestSetStatus,
 from uuid import UUID
 from typing import List
 
-qwest_router = APIRouter()
+quest_router = APIRouter()
 user_basedao = BaseDao(User_DB)
-qwest_dao = BaseDao(Quests_DB)
+quest_dao = BaseDao(Quests_DB)
 user_qwests_dao = BaseDao(UserQuests)
 
 
-@qwest_router.post("/create/qwest", tags=["quest"])
+@quest_router.post("/create/qwest", tags=["quest"])
 async def create_qwest(quest: QuestCreate) -> QuestCreate:
-    qwest = await qwest_dao.create_entity(quest.model_dump())
-    return qwest
+    quest = await quest_dao.create_entity(quest.model_dump())
+    return quest
 
 
-@qwest_router.post("/user/add", tags=["quest"])
-async def user_add_quest(qwest_id: UserQuestCreate, user: User_DB = Depends(decode_access_token)) -> CreateSuccess:
-    user_quest = await user_qwests_dao.create_entity({"user_id": user.user_id, "quest_id": qwest_id.quest_id, "status": "active"})
+@quest_router.post("/user/add", tags=["quest"])
+async def user_add_quest(quest_id: UserQuestCreate, user: User_DB = Depends(decode_access_token)) -> CreateSuccess:
+    user_quest = await user_qwests_dao.create_entity({"user_id": user.user_id, "quest_id": quest_id.quest_id, "status": "active"})
     return {
         "user_id": user_quest.user_id,
         "qwest_id": user_quest.quest_id,
@@ -30,7 +30,7 @@ async def user_add_quest(qwest_id: UserQuestCreate, user: User_DB = Depends(deco
     }
 
 
-@qwest_router.put("/set/status", tags=["quest"])
+@quest_router.put("/set/status", tags=["quest"])
 async def quest_set_status(quest: QuestSetStatus, user: User_DB = Depends(decode_access_token)) -> QuestSetStatus:
     user_quest: UserQuests = await user_qwests_dao.get_entity_by_id(quest.quest_id)
     user_quest = quest.status
@@ -40,7 +40,7 @@ async def quest_set_status(quest: QuestSetStatus, user: User_DB = Depends(decode
             "status": quest.status
             }
     
-@qwest_router.put("/set/progress", tags=["quest"])
+@quest_router.put("/set/progress", tags=["quest"])
 async def quest_set_progress(quest: QuestSetProgress, user: User_DB = Depends(decode_access_token)) -> QuestSetStatus:
     user_quest: UserQuests = await user_qwests_dao.get_entity_by_id(quest.quest_id)
     user_quest = quest.progress
@@ -50,7 +50,7 @@ async def quest_set_progress(quest: QuestSetProgress, user: User_DB = Depends(de
             "status": quest.progress
             }
 
-@qwest_router.get("/get/user/quests", response_model=List[QuestResponse], tags=["quest"])
+@quest_router.get("/get/user/quests", response_model=List[QuestResponse], tags=["quest"])
 async def get_user_quests(user: User_DB = Depends(decode_access_token)):
     return [
         QuestResponse(

@@ -11,11 +11,11 @@ class Prize(BaseModel):
     rare: str
     
     
-class get_prize(BaseModel):
+class GetPrize(BaseModel):
     name: str
 
-class User_Win(BaseModel):
+class UserWin(BaseModel):
     username: str
     
-class User_Bet(BaseModel):
+class UserBet(BaseModel):
     bet: int

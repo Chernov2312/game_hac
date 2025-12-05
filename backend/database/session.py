@@ -17,5 +17,8 @@ async def create_db():
         await conn.run_sync(Base.metadata.create_all)
         
 async def drop_db():
+    """Удаление таблиц через SQLAlchemy с cascade"""
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
+        # Правильное использование cascade для удаления зависимых объектов
+        await conn.run_sync(Base.metadata.drop_all, cascade=True, checkfirst=True)
+    print("Tables dropped with cascade=True")

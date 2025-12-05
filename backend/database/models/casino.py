@@ -16,7 +16,7 @@ class Casino_DB(Base):
     type: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str] = mapped_column(String(250), nullable=False)
     amount: Mapped[int] = mapped_column(Integer, default=0)
-    amoji: Mapped[str] = mapped_column(String(20), default=0)
+    emoji: Mapped[str] = mapped_column(String(20), default=0)
     color: Mapped[str] = mapped_column(String(20), default=0)
     
     rare: Mapped[str] = mapped_column(String(100), nullable=False)

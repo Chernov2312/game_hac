@@ -3,7 +3,7 @@ import asyncio
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from database import create_db, drop_db
-from routes import auth_router, casino_router, user_router, admin_router, game_router, qwest_router
+from routes import auth_router, casino_router, user_router, admin_router, game_router, quest_router
 
 
 @asynccontextmanager
@@ -12,7 +12,7 @@ async def lifespan(app: FastAPI):
     await create_db()
     print("Database connected!")
     yield
-    #await drop_db()
+    await drop_db()
     print("The app is shutting down!")
     
     
@@ -22,6 +22,6 @@ app.include_router(casino_router, prefix="/v1/casino")
 app.include_router(user_router, prefix="/v1/user")
 app.include_router(admin_router, prefix="/v1/admin")
 app.include_router(game_router, prefix="/v1/game")
-app.include_router(qwest_router, prefix="/v1/qwest")
+app.include_router(quest_router, prefix="/v1/quest")
 if __name__ == "__main__":
-    uvicorn.run(app,host="0.0.0.0", port=80)
+    uvicorn.run(app)

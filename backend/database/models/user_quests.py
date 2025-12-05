@@ -12,6 +12,7 @@ if TYPE_CHECKING:
 
 class UserQuests(Base):
     __tablename__ = 'user_quests'
+    
     user_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         ForeignKey('users.user_id', ondelete='CASCADE'),
@@ -23,11 +24,14 @@ class UserQuests(Base):
         ForeignKey('quests.quest_id', ondelete='CASCADE'),
         primary_key=True
     )
+    
     progress: Mapped[int] = mapped_column(Integer, default=0)
     status: Mapped[str] = mapped_column(String(50), default="isnt active")
     started_at: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now()
     )
-    user: Mapped["User_DB"] = relationship(back_populates="quests_association")
-    quest: Mapped["Quests_DB"] = relationship(back_populates="users_association")
+    
+    # УБЕРИТЕ ЭТИ ОТНОШЕНИЯ - они конфликтуют с secondary связями
+    # user: Mapped["User_DB"] = relationship(back_populates="user_quests")
+    # quest: Mapped["Quests_DB"] = relationship(back_populates="user_quests")

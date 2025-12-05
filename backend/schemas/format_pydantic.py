@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional, Literal, List, Any
+from typing import Optional, Literal, List, Any,Dict
 from uuid import UUID
 
 class WinnerItemResponse(BaseModel):
@@ -76,3 +76,33 @@ class TeamLeaderboardResponse(BaseModel):
 class CreateSuccess(BaseModel):
     user_id: UUID
     quest_id: UUID
+    
+class Quest(BaseModel):
+    id: int
+    name: str
+    description: str
+    reward: int
+    completed: bool = False
+
+class Balance(BaseModel):
+    amount: int
+    currency_symbol: str = "❄️"
+
+class Energy(BaseModel):
+    current: int
+    max: int = 10
+    next_refill_in_seconds: Optional[int] = None
+
+class UserSummary(BaseModel):
+    id: int = Field(alias="user_id")  # Используем alias для соответствия с полем БД
+    display_name: str
+    balance: Balance
+    energy: Energy
+
+    class Config:
+        # Разрешаем использовать как field_name, так и alias при создании
+        allow_population_by_field_name = True
+
+class MainInfoResponse(BaseModel):
+    user_summary: UserSummary
+    quests: List[Dict[str, Any]] = []

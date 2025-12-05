@@ -9,7 +9,7 @@ from pwdlib import PasswordHash
 from config import settings
 from database.models import User_DB, RefreshToken_DB
 from database import BaseDao
-from schemas import User_Login
+from schemas import UserLogin
 import secrets
 
 password_hash = PasswordHash.recommended()
