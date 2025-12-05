@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from database.models import User_DB, Casino_DB, Items_DB, Quests_DB, Token_qr_DB, Team_DB
 from database import BaseDao
 import random
-from schemas import Prize, get_prize, User_Bet, Redact_User
+from schemas import Prize, get_prize, User_Bet, Redact_User, User, UserResponse, UserBalance, TeamLeaderboardResponse
 from core import decode_access_token, generate_qr_base64, get_time_diff_seconds, research_user_energy
 import uuid
 user_router = APIRouter()
@@ -15,27 +15,27 @@ quest_dao = BaseDao(Quests_DB)
 item_token_dao = BaseDao(Token_qr_DB)
 
 @user_router.get("/profile/balance", tags=["user"])
-async def get_user_amount(user: User_DB = Depends(decode_access_token)):
+async def get_user_amount(user: User_DB = Depends(decode_access_token)) -> UserBalance:
     return {
         "amount": user.amount,
         "currency_symbol": random.choice(["❄️", "💰", "$", "RUB"])
     }
     
 @user_router.get("/profile/me", tags=["user"])
-async def get_user_info(user: User_DB = Depends(decode_access_token)):
+async def get_user_info(user: User_DB = Depends(decode_access_token)) -> UserResponse:
     return {
-  "id": user.user_id,
-  "username": user.username,
-  "department": user.team,
-  "avatar_url": user.url,
-  "level": user.level,
-  "xp": user.score,
-  "max_xp": user.max_score,
-  "inventory": user.items
+        "id": user.user_id,
+        "username": user.username,
+        "department": user.team,
+        "avatar_url": user.url,
+        "level": user.level,
+        "xp": user.score,
+        "max_xp": user.max_score,
+        "inventory": user.items
 }
 
 @user_router.patch("/profile/me", tags=["user"])
-async def patch_user(redact_info: Redact_User, user: User_DB = Depends(decode_access_token)):
+async def patch_user(redact_info: Redact_User, user: User_DB = Depends(decode_access_token)) -> User:
     user.display_name = redact_info.display_name
     user.url = redact_info.url
     await user_basedao.update_entity(user.user_id, user)
@@ -51,7 +51,7 @@ async def get_qr(id: uuid.UUID, user: User_DB = Depends(decode_access_token)):
     }
     
 @user_router.get("/leaderboard/team", tags=["team"])
-async def get_leaderboard():
+async def get_leaderboard() -> TeamLeaderboardResponse:
     leaders = await team_basedao.get_entities()
     for team in leaders:
         if team.score > team.max_score:
@@ -70,7 +70,7 @@ async def get_leaderboard():
     
 
 @user_router.get("/leaderboard/user", tags=["user"])
-async def get_leaderboard():
+async def get_leaderboard() -> TeamLeaderboardResponse:
     leaders = await user_basedao.get_entities()
     for user in leaders:
         if user.score > user.max_score:

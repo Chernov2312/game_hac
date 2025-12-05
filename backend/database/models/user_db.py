@@ -3,6 +3,8 @@ from sqlalchemy import String, ForeignKey, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from typing import Optional, TYPE_CHECKING, List
 import uuid
+from datetime import datetime
+from sqlalchemy import DateTime, func
 from database import Base
 
 if TYPE_CHECKING:
@@ -41,7 +43,14 @@ class User_DB(Base):
     role: Mapped[str] = mapped_column(String(20), default="player")
     team: Mapped[Optional['Team_DB']] = relationship('Team_DB', back_populates='users', lazy="joined")
     items: Mapped[List['Items_DB']] = relationship('Items_DB', back_populates='user', lazy="joined")
-    quests: Mapped[List['Quests_DB']] = relationship('Quests_DB', back_populates='user', lazy="joined")
+    quests: Mapped[List['Quests_DB']] = relationship(
+        'Quests_DB',
+        secondary='user_quests',
+        back_populates='users',
+        lazy="joined",
+        cascade="all, delete"
+    )
+    
     refresh_tokens: Mapped[List['RefreshToken_DB']] = relationship(
         'RefreshToken_DB', 
         back_populates='user',

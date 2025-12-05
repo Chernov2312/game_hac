@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, ForeignKey, Integer, Boolean
+from sqlalchemy import String, ForeignKey, Integer
 from sqlalchemy.dialects.postgresql import UUID
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, List
 import uuid
 from database import Base
 
@@ -20,12 +20,9 @@ class Quests_DB(Base):
     type: Mapped[str] = mapped_column(String(100), nullable=False)
     description: Mapped[str] = mapped_column(String(250), nullable=False)
     amount: Mapped[int] = mapped_column(Integer, nullable=False)
-    status:Mapped[str] = mapped_column(String(50), default="isnt active")
-    progress:Mapped[int] = mapped_column(Integer, default=0)
-    user_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
-        ForeignKey("users.user_id"),
-        nullable=False
+    users: Mapped[List['User_DB']] = relationship(
+        'User_DB',
+        secondary='user_quests',
+        back_populates='quests',
+        lazy="joined"
     )
-    user: Mapped['User_DB'] = relationship('User_DB', back_populates='quests', lazy="joined")
-    

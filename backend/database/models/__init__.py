@@ -6,3 +6,4 @@ from .refresh_token_db import RefreshToken_DB
 from .quest_bd import Quests_DB
 from .token_qr import Token_qr_DB
 from .game_session import Game_session_DB
+from .user_quests_db import UserQuests

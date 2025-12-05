@@ -4,7 +4,7 @@ from database import BaseDao
 import random
 from core import get_random_item, decode_access_token
 from typing import List
-from schemas import game_result, game_session
+from schemas import game_result, game_session, GameStart
 
 game_router = APIRouter()
 
@@ -15,7 +15,7 @@ items_dao = BaseDao(Items_DB)
 game_session_dao = BaseDao(Game_session_DB)
 
 @game_router.get("/start", tags=["game"])
-async def get_session_game(user: User_DB = Depends(decode_access_token)):
+async def get_session_game(user: User_DB = Depends(decode_access_token)) -> GameStart:
     score = user.score
     users = await user_basedao.get_all_by_score(score)
     elem = random.choice(users)

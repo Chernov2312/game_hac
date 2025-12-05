@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from database.models import User_DB, Casino_DB, Items_DB
 from database import BaseDao
 import random
-from schemas import Prize, get_prize, User_Bet
+from schemas import Prize, get_prize, User_Bet, BetResultResponse
 from core import get_random_item, decode_access_token
 from typing import List
 casino_router = APIRouter()
@@ -38,7 +38,7 @@ async def get_user_balance(user: User_DB = Depends(decode_access_token)):
 async def user_win_to_db(
     bet: User_Bet,
     user: User_DB = Depends(decode_access_token)
-    ):
+    ) -> BetResultResponse:
     if user.amount < bet.bet:
         raise HTTPException(status_code=402, detail={
             "error_code": "insufficient_funds",
